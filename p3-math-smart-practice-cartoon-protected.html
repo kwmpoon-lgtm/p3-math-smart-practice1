@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>P3 Mathematics Adventure – Smart Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #fdf2ff 0, #f5f7fb 45%, #e3f2ff 100%);
+      color: #222;
+    }
+    header {
+      background: linear-gradient(135deg, #4c6fff, #7d9bff);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    header .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .mascot {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fff 0, #fef3c7 40%, #facc15 100%);
+      border: 2px solid rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+    .mascot-face {
+      font-size: 1.6rem;
+    }
+    .mascot-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #22c55e;
+      color: #fff;
+      font-size: 0.6rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 999px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .mode-switch {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .mode-switch button {
+      border: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .mode-switch button.active {
+      background: #fff;
+      color: #4c6fff;
+      font-weight: 600;
+    }
+    .mode-switch button:hover {
+      transform: translateY(-1px);
+    }
+    main {
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at -10% 0, rgba(129,140,248,0.13) 0, transparent 55%),
+        radial-gradient(circle at 110% 100%, rgba(96,165,250,0.16) 0, transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 0.45rem 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #d4d7e5;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      background: rgba(255,255,255,0.9);
+    }
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: #4c6fff;
+      box-shadow: 0 0 0 1px rgba(76,111,255,0.2);
+    }
+    button.primary {
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #4c6fff, #6366f1);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-right: 0.5rem;
+      margin-top: 0.25rem;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 6px 14px rgba(55, 65, 81, 0.25);
+    }
+    button.secondary {
+      border: none;
+      padding: 0.45rem 1.0rem;
+      border-radius: 999px;
+      background: #e4e7ff;
+      color: #293b8f;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    button.primary:disabled,
+    button.secondary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    button.primary:hover:not(:disabled),
+    button.secondary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(55, 65, 81, 0.22);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: #e5f3ff;
+      color: #1855a6;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-left: 0.35rem;
+    }
+    .question-text {
+      font-size: 1.0rem;
+      margin-bottom: 0.75rem;
+    }
+    .meta {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
+    .feedback {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: #f3f4ff;
+      color: #111827;
+      min-height: 2.2em;
+      white-space: pre-line;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .feedback-icon {
+      font-size: 1.3rem;
+      margin-top: 0.1rem;
+    }
+    .feedback-content {
+      flex: 1;
+    }
+    .feedback.hint {
+      border-left: 4px solid #4c6fff;
+    }
+    .feedback.success {
+      background: #ecfdf3;
+      border-left: 4px solid #16a34a;
+      color: #064e3b;
+    }
+    .feedback.error {
+      background: #fef2f2;
+      border-left: 4px solid #f97373;
+      color: #7f1d1d;
+    }
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      color: #6b7280;
+    }
+    .status-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    .two-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.9);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 0.4rem 0.45rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .muted {
+      color: #6b7280;
+      font-size: 0.8rem;
+    }
+    .badge {
+      padding: 0.1rem 0.35rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      background: #e5f3ff;
+      color: #1f2937;
+    }
+    .teacher-note {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+    .illustration-wrapper {
+      margin-top: 0.9rem;
+      padding: 0.75rem 0.8rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #eff6ff, #fdf2ff);
+      border: 1px dashed rgba(129,140,248,0.5);
+    }
+    .illustration-header {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .illustration-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: stretch;
+    }
+    .illustration-card {
+      flex: 1 1 90px;
+      min-width: 90px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 3px 7px rgba(148,163,184,0.3);
+      padding: 0.4rem 0.45rem 0.35rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .illustration-card span.big-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.2rem;
+    }
+    .illustration-label {
+      font-size: 0.78rem;
+      color: #374151;
+    }
+    .illustration-card.highlight {
+      border: 2px solid #4c6fff;
+    }
+    .illustration-small-number {
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+      color: #111827;
+    }
+    @media (max-width: 800px) {
+      .two-cols {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1><span class="mascot"><span class="mascot-face">🧮</span><span class="mascot-badge">P3</span></span> P3 Mathematics Adventure</h1>
+    <div class="subtitle">Cute maths quests for students · Automatic performance overview for teachers</div>
+  </div>
+  <div class="mode-switch">
+    <span style="font-size:0.8rem;opacity:0.85;">View as:</span>
+    <button id="studentModeBtn" class="active">Student</button>
+    <button id="teacherModeBtn">Teacher</button>
+  </div>
+</header>
+
+<main>
+  <!-- Student View -->
+  <section id="studentView">
+    <div class="card">
+      <h2>Student Login <span class="pill">Primary 3</span></h2>
+      <div class="two-cols">
+        <div>
+          <label for="studentClass">Class</label>
+          <select id="studentClass">
+            <option value="">Select your class</option>
+            <option value="3A">3A</option>
+            <option value="3B">3B</option>
+            <option value="3C">3C</option>
+          </select>
+
+          <label for="studentName">Name</label>
+          <input type="text" id="studentName" placeholder="e.g. Chan Tai Man">
+
+          <button class="primary" id="startPracticeBtn">Start Maths Adventure ✨</button>
+          <div class="teacher-note">
+            Your practice on this device will be stored in this browser and can be seen by your teacher (with a password).
+          </div>
+        </div>
+        <div>
+          <h3>How it works</h3>
+          <ul style="padding-left:1.1rem;font-size:0.85rem;margin-top:0.35rem;">
+            <li>Read the story question and look at the picture helper.</li>
+            <li>Type your answer and press <strong>Check Answer</strong>.</li>
+            <li>If it’s not correct, you will get hints to think again.</li>
+            <li>After the last try, the correct answer and a step-by-step picture explanation will appear.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="questionCard" style="display:none;">
+      <h2>Practice Question <span class="pill" id="questionIndexPill"></span></h2>
+      <div class="question-text" id="questionText"></div>
+      <div class="meta">
+        Topic: <span class="tag" id="questionTopicTag"></span>
+      </div>
+      <label for="answerInput">Your answer (number only)</label>
+      <input type="text" id="answerInput" placeholder="Type your answer here">
+      <div class="status-row">
+        <span>Attempts: <span id="attemptCount">0</span>/<span id="maxAttempts">2</span></span>
+      </div>
+      <div style="margin-top:0.5rem;">
+        <button class="primary" id="checkAnswerBtn">Check Answer ✅</button>
+        <button class="secondary" id="nextQuestionBtn" disabled>Next Question →</button>
+      </div>
+      <div id="illustrationArea" class="illustration-wrapper" style="display:none;"></div>
+      <div class="feedback" id="feedbackBox">
+        <span class="feedback-icon">💬</span>
+        <div class="feedback-content">Your feedback will appear here.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teacher View -->
+  <section id="teacherView" style="display:none;">
+    <div class="card">
+      <h2>Teacher Dashboard <span class="pill">Class Performance</span></h2>
+      <div class="two-cols">
+        <div>
+          <label for="teacherClassSelect">Select class</label>
+          <select id="teacherClassSelect">
+            <option value="">Choose a class</option>
+            <option value="3A">3A</option>
+            <option value="3B">3B</option>
+            <option value="3C">3C</option>
+          </select>
+          <div class="teacher-note">
+            Records are stored in this browser using <code>localStorage</code>.<br>
+            When you reopen this HTML file in the same browser on the same device, previous data will still be here.
+          </div>
+        </div>
+        <div>
+          <h3>What you can see</h3>
+          <ul style="padding-left:1.1rem;font-size:0.85rem;margin-top:0.35rem;">
+            <li>Which students completed questions.</li>
+            <li>How many questions they solved correctly.</li>
+            <li>Average attempts per question.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="teacherSummaryCard">
+      <h3>Class Summary</h3>
+      <div id="classSummaryText" class="muted">Please choose a class to see results.</div>
+      <div style="margin-top:0.75rem;overflow-x:auto;">
+        <table id="teacherTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Questions Attempted</th>
+              <th>Questions Correct</th>
+              <th>Accuracy</th>
+              <th>Avg Attempts</th>
+            </tr>
+          </thead>
+          <tbody id="teacherTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  /***********************
+   * Config
+   ***********************/
+  // Change this password if you like.
+  const TEACHER_PASSWORD = "p3teacher";
+  const TEACHER_UNLOCK_KEY = "p3TeacherUnlocked";
+
+  let isTeacherAuthenticated = false;
+
+  /***********************
+   * Question Bank (P3)
+   ***********************/
+  const QUESTION_BANK = [
+    {
+      id: 1,
+      topic: "Subtraction (3-digit)",
+      icon: "⭐",
+      roles: { start: "Start", change: "Give away", result: "Left" },
+      text: "Tom had 125 stickers. He gave 48 stickers to his friend. How many stickers does he have left?",
+      answer: 77,
+      hints: [
+        "We want to know how many stickers are left after Tom gives some away. This is subtraction.",
+        "Try 125 - 48. You can think: 125 - 50 = 75, then add 2 back to get 77."
+      ],
+      explanation:
+        "We subtract the stickers Tom gave away from the total he had.\n" +
+        "125 - 48 = 77.\n" +
+        "So Tom has 77 stickers left."
+    },
+    {
+      id: 2,
+      topic: "Addition (3-digit)",
+      icon: "🚗",
+      roles: { start: "In the box", change: "Add more", result: "Total" },
+      text: "A box has 236 toy cars. The teacher adds 145 more toy cars into the box. How many toy cars are there in total?",
+      answer: 381,
+      hints: [
+        "This is an 'add more' situation. We add the cars in the box and the cars added.",
+        "Add hundreds, tens and ones: 236 + 145 carefully."
+      ],
+      explanation:
+        "We add the cars already in the box and the cars the teacher adds.\n" +
+        "236 + 145 = 381.\n" +
+        "So there are 381 toy cars in total."
+    },
+    {
+      id: 3,
+      topic: "Money (Subtraction)",
+      icon: "💵",
+      roles: { start: "Start", change: "Spend", result: "Left" },
+      text: "Amy has $90. She buys a storybook for $38. How much money does she have left?",
+      answer: 52,
+      hints: [
+        "She spends part of her money to buy the book, so we subtract.",
+        "Think 90 - 40 = 50, then add 2 back because we only subtract 38, not 40."
+      ],
+      explanation:
+        "We subtract the money spent from the total money she had.\n" +
+        "90 - 38 = 52.\n" +
+        "So Amy has $52 left."
+    },
+    {
+      id: 4,
+      topic: "Addition (2 numbers)",
+      icon: "🧒",
+      roles: { start: "In hall", change: "Come in", result: "Total" },
+      text: "There are 45 students in a hall. 18 more students come in. How many students are there in the hall now?",
+      answer: 63,
+      hints: [
+        "More students come in, so the number becomes bigger. Use addition.",
+        "Add 45 + 18. You can do 45 + 10 + 8."
+      ],
+      explanation:
+        "We add the students already in the hall and the students who come in.\n" +
+        "45 + 18 = 63.\n" +
+        "So there are 63 students in the hall now."
+    },
+    {
+      id: 5,
+      topic: "Multiplication (repeated addition)",
+      icon: "✏️",
+      roles: { start: "Price", change: "Number of pencils", result: "Total cost" },
+      text: "One pencil costs $7. Ben buys 4 pencils. How much does he need to pay in total?",
+      answer: 28,
+      hints: [
+        "He buys 4 pencils at the same price. This is repeated addition.",
+        "You can do 7 + 7 + 7 + 7 or 7 × 4."
+      ],
+      explanation:
+        "We can use multiplication for equal groups.\n" +
+        "7 × 4 = 28.\n" +
+        "So Ben needs to pay $28."
+    },
+    {
+      id: 6,
+      topic: "Division (equal sharing)",
+      icon: "🍬",
+      roles: { start: "Total sweets", change: "Children", result: "Each child" },
+      text: "There are 20 sweets to be shared equally among 5 children. How many sweets does each child get?",
+      answer: 4,
+      hints: [
+        "We are sharing 20 sweets equally among 5 children. This is division.",
+        "Think: 20 ÷ 5 = ?, or how many sweets in each group if there are 5 groups."
+      ],
+      explanation:
+        "We divide the total sweets by the number of children.\n" +
+        "20 ÷ 5 = 4.\n" +
+        "So each child gets 4 sweets."
+    }
+  ];
+
+  /*******************************
+   * Simple "AI-style" feedback
+   *******************************/
+  const MAX_ATTEMPTS = 2; // after this, show explanation
+
+  function getAiLikeFeedback(question, studentAnswer, isCorrect, attemptNumber) {
+    if (isCorrect) {
+      return {
+        type: "success",
+        icon: "🎉",
+        text: "Excellent! Your answer is correct. Well done, maths hero!"
+      };
+    }
+
+    const numericStudent = Number(studentAnswer);
+    if (isNaN(numericStudent)) {
+      return {
+        type: "error",
+        icon: "❗",
+        text: "Please check again. Your answer should be a number. Try writing only digits, for example 52."
+      };
+    }
+
+    if (attemptNumber === 1) {
+      const hint = question.hints[0] || "Think carefully about what the question is asking.";
+      return {
+        type: "hint",
+        icon: "💡",
+        text: "Not quite yet. Here is a hint:\n" + hint
+      };
+    } else if (attemptNumber <= MAX_ATTEMPTS) {
+      const hint = question.hints[1] || question.hints[0] || "";
+      return {
+        type: "hint",
+        icon: "🔍",
+        text: "Still not correct. Think again with this hint:\n" + hint
+      };
+    } else {
+      return {
+        type: "error",
+        icon: "📘",
+        text: "Let's look at the solution together:\n" + question.explanation
+      };
+    }
+  }
+
+  /***************************************
+   * Illustration (cartoon-style helper)
+   ***************************************/
+  function updateIllustration(question, showAnswer) {
+    const area = document.getElementById("illustrationArea");
+    if (!question) {
+      area.style.display = "none";
+      area.innerHTML = "";
+      return;
+    }
+    const icon = question.icon || "🧮";
+    const roles = question.roles || { start: "Start", change: "Change", result: "Result" };
+    const answer = question.answer;
+
+    let resultLabel = showAnswer ? answer : "?";
+    let resultClass = showAnswer ? "illustration-card highlight" : "illustration-card";
+
+    area.style.display = "";
+    area.innerHTML = `
+      <div class="illustration-header">
+        <span>🖼️</span><span>Picture helper</span>
+      </div>
+      <div class="illustration-row">
+        <div class="illustration-card">
+          <span class="big-icon">${icon}</span>
+          <div class="illustration-label">${roles.start}</div>
+          <div class="illustration-small-number">Given in story</div>
+        </div>
+        <div class="illustration-card">
+          <span class="big-icon">➕➖</span>
+          <div class="illustration-label">${roles.change}</div>
+          <div class="illustration-small-number">Think what happens</div>
+        </div>
+        <div class="${resultClass}">
+          <span class="big-icon">${showAnswer ? "✅" : "❓"}</span>
+          <div class="illustration-label">${roles.result}</div>
+          <div class="illustration-small-number">${resultLabel}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  /***************************************
+   * Local "database" for teacher view
+   * stored in browser localStorage
+   ***************************************/
+  const STORAGE_KEY = "p3MathSmartPracticeResults";
+
+  function loadResults() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      return JSON.parse(raw);
+    } catch (e) {
+      console.error("Failed to load results", e);
+      return {};
+    }
+  }
+
+  function saveResults(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.error("Failed to save results", e);
+    }
+  }
+
+  function recordAttempt(className, studentName, questionId, correct, attemptsUsed) {
+    const db = loadResults();
+    if (!db[className]) db[className] = {};
+    if (!db[className][studentName]) {
+      db[className][studentName] = {
+        attempts: {},
+        totalQuestions: 0,
+        correctQuestions: 0,
+        totalAttempts: 0
+      };
+    }
+    const student = db[className][studentName];
+    const prev = student.attempts[questionId];
+
+    if (!prev || (correct && !prev.correct) || (correct === prev.correct && attemptsUsed < prev.attemptsUsed)) {
+      student.attempts[questionId] = {
+        attemptsUsed,
+        correct
+      };
+    }
+
+    const values = Object.values(student.attempts);
+    student.totalQuestions = values.length;
+    student.correctQuestions = values.filter(a => a.correct).length;
+    student.totalAttempts = values.reduce((sum, a) => sum + a.attemptsUsed, 0);
+
+    saveResults(db);
+  }
+
+  /***********************
+   * Teacher password handling
+   ***********************/
+  function checkTeacherUnlockedFromStorage() {
+    try {
+      return localStorage.getItem(TEACHER_UNLOCK_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function saveTeacherUnlocked() {
+    try {
+      localStorage.setItem(TEACHER_UNLOCK_KEY, "1");
+    } catch (e) {
+      console.error("Cannot save teacher unlock flag", e);
+    }
+  }
+
+  function requestTeacherAccess() {
+    const entered = prompt("Teacher only. Please enter the teacher password:");
+    if (entered === null) {
+      return false;
+    }
+    if (entered === TEACHER_PASSWORD) {
+      isTeacherAuthenticated = true;
+      saveTeacherUnlocked();
+      alert("Teacher mode unlocked.");
+      return true;
+    } else {
+      alert("Incorrect password. You cannot enter teacher mode.");
+      return false;
+    }
+  }
+
+  /***********************
+   * UI Logic
+   ***********************/
+  const studentModeBtn = document.getElementById("studentModeBtn");
+  const teacherModeBtn = document.getElementById("teacherModeBtn");
+  const studentView = document.getElementById("studentView");
+  const teacherView = document.getElementById("teacherView");
+
+  const studentClassSelect = document.getElementById("studentClass");
+  const studentNameInput = document.getElementById("studentName");
+  const startPracticeBtn = document.getElementById("startPracticeBtn");
+  const questionCard = document.getElementById("questionCard");
+  const questionTextEl = document.getElementById("questionText");
+  const questionTopicTag = document.getElementById("questionTopicTag");
+  const questionIndexPill = document.getElementById("questionIndexPill");
+  const answerInput = document.getElementById("answerInput");
+  const checkAnswerBtn = document.getElementById("checkAnswerBtn");
+  const nextQuestionBtn = document.getElementById("nextQuestionBtn");
+  const feedbackBox = document.getElementById("feedbackBox");
+  const attemptCountEl = document.getElementById("attemptCount");
+  const maxAttemptsEl = document.getElementById("maxAttempts");
+
+  const teacherClassSelect = document.getElementById("teacherClassSelect");
+  const teacherTable = document.getElementById("teacherTable");
+  const teacherTableBody = document.getElementById("teacherTableBody");
+  const classSummaryText = document.getElementById("classSummaryText");
+
+  let currentStudent = null;
+  let currentQuestionIndex = 0;
+  let currentAttempt = 0;
+  let locked = false;
+
+  maxAttemptsEl.textContent = String(MAX_ATTEMPTS);
+
+  function switchMode(mode) {
+    if (mode === "student") {
+      studentView.style.display = "";
+      teacherView.style.display = "none";
+      studentModeBtn.classList.add("active");
+      teacherModeBtn.classList.remove("active");
+    } else {
+      if (!isTeacherAuthenticated) {
+        const ok = requestTeacherAccess();
+        if (!ok) {
+          // Stay in student mode
+          studentView.style.display = "";
+          teacherView.style.display = "none";
+          studentModeBtn.classList.add("active");
+          teacherModeBtn.classList.remove("active");
+          return;
+        }
+      }
+      studentView.style.display = "none";
+      teacherView.style.display = "";
+      studentModeBtn.classList.remove("active");
+      teacherModeBtn.classList.add("active");
+      refreshTeacherView();
+    }
+  }
+
+  studentModeBtn.addEventListener("click", () => switchMode("student"));
+  teacherModeBtn.addEventListener("click", () => switchMode("teacher"));
+
+  function loadQuestion(index) {
+    const q = QUESTION_BANK[index];
+    questionTextEl.textContent = q.text;
+    questionTopicTag.textContent = q.topic;
+    questionIndexPill.textContent = `Question ${index + 1} of ${QUESTION_BANK.length}`;
+    feedbackBox.className = "feedback";
+    feedbackBox.querySelector(".feedback-icon").textContent = "💬";
+    feedbackBox.querySelector(".feedback-content").textContent = "Your feedback will appear here.";
+    answerInput.value = "";
+    attemptCountEl.textContent = "0";
+    currentAttempt = 0;
+    locked = false;
+    checkAnswerBtn.disabled = false;
+    nextQuestionBtn.disabled = true;
+    updateIllustration(q, false);
+  }
+
+  startPracticeBtn.addEventListener("click", () => {
+    const className = studentClassSelect.value.trim();
+    const studentName = studentNameInput.value.trim();
+    if (!className) {
+      alert("Please select your class.");
+      return;
+    }
+    if (!studentName) {
+      alert("Please enter your name.");
+      return;
+    }
+    currentStudent = { className, studentName };
+    questionCard.style.display = "";
+    currentQuestionIndex = 0;
+    loadQuestion(currentQuestionIndex);
+  });
+
+  checkAnswerBtn.addEventListener("click", () => {
+    if (!currentStudent) {
+      alert("Please select class and enter name first.");
+      return;
+    }
+    if (locked) return;
+
+    const studentAnswerStr = answerInput.value.trim();
+    if (!studentAnswerStr) {
+      feedbackBox.className = "feedback error";
+      feedbackBox.querySelector(".feedback-icon").textContent = "❗";
+      feedbackBox.querySelector(".feedback-content").textContent = "Please enter your answer first.";
+      return;
+    }
+
+    currentAttempt += 1;
+    attemptCountEl.textContent = String(currentAttempt);
+
+    const q = QUESTION_BANK[currentQuestionIndex];
+    const correctNumeric = Number(q.answer);
+    const studentNumeric = Number(studentAnswerStr);
+    const isCorrect = !isNaN(studentNumeric) && studentNumeric === correctNumeric;
+
+    const fb = getAiLikeFeedback(q, studentAnswerStr, isCorrect, currentAttempt);
+
+    feedbackBox.className = "feedback " + fb.type;
+    feedbackBox.querySelector(".feedback-icon").textContent = fb.icon;
+    feedbackBox.querySelector(".feedback-content").textContent = fb.text;
+
+    if (isCorrect) {
+      locked = true;
+      checkAnswerBtn.disabled = true;
+      nextQuestionBtn.disabled = false;
+      updateIllustration(q, true);
+      recordAttempt(currentStudent.className, currentStudent.studentName, q.id, true, currentAttempt);
+    } else {
+      if (currentAttempt > MAX_ATTEMPTS) {
+        locked = true;
+        checkAnswerBtn.disabled = true;
+        nextQuestionBtn.disabled = false;
+        updateIllustration(q, true);
+        recordAttempt(currentStudent.className, currentStudent.studentName, q.id, false, currentAttempt);
+      } else {
+        updateIllustration(q, false);
+      }
+    }
+  });
+
+  nextQuestionBtn.addEventListener("click", () => {
+    currentQuestionIndex = (currentQuestionIndex + 1) % QUESTION_BANK.length;
+    loadQuestion(currentQuestionIndex);
+  });
+
+  /***********************
+   * Teacher Dashboard
+   ***********************/
+  teacherClassSelect.addEventListener("change", refreshTeacherView);
+
+  function refreshTeacherView() {
+    const className = teacherClassSelect.value;
+    const db = loadResults();
+    if (!className) {
+      classSummaryText.textContent = "Please choose a class to see results.";
+      teacherTable.style.display = "none";
+      return;
+    }
+
+    const classData = db[className] || {};
+    const studentNames = Object.keys(classData);
+
+    if (studentNames.length === 0) {
+      classSummaryText.textContent = "No practice records found for this class on this device yet.";
+      teacherTable.style.display = "none";
+      return;
+    }
+
+    teacherTableBody.innerHTML = "";
+    let totalQuestions = 0;
+    let totalCorrect = 0;
+    let totalAttempts = 0;
+
+    studentNames.forEach(name => {
+      const s = classData[name];
+      const tq = s.totalQuestions || 0;
+      const tc = s.correctQuestions || 0;
+      const ta = s.totalAttempts || 0;
+      const acc = tq > 0 ? Math.round((tc / tq) * 100) : 0;
+      const avgAttempts = tq > 0 ? (ta / tq).toFixed(2) : "-";
+
+      totalQuestions += tq;
+      totalCorrect += tc;
+      totalAttempts += ta;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${name}</td>
+        <td>${tq}</td>
+        <td>${tc}</td>
+        <td><span class="badge">${acc}%</span></td>
+        <td>${avgAttempts}</td>
+      `;
+      teacherTableBody.appendChild(tr);
+    });
+
+    const classAcc = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+    const classAvgAttempts = totalQuestions > 0 ? (totalAttempts / totalQuestions).toFixed(2) : "-";
+
+    classSummaryText.innerHTML =
+      `<strong>Class ${className} summary</strong><br>` +
+      `Total questions answered: ${totalQuestions}<br>` +
+      `Total correct answers: ${totalCorrect}<br>` +
+      `Class accuracy: <strong>${classAcc}%</strong> · Average attempts per question: <strong>${classAvgAttempts}</strong>`;
+
+    teacherTable.style.display = "";
+  }
+
+  // Initialise teacher auth from previous sessions (same browser)
+  isTeacherAuthenticated = checkTeacherUnlockedFromStorage();
+
+  // Start in student mode
+  switchMode("student");
+</script>
+</body>
+</html>
